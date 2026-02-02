@@ -1,0 +1,60 @@
+name: GitHub Actions Project
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  job1:
+    name: Job 1 - Basic info
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Print Hello
+        run: echo "Hello"
+
+      - name: Print Ubuntu version
+        run: cat /etc/os-release
+
+      - name: Print commit SHA
+        run: echo "${{ github.sha }}"
+
+  job2:
+    name: Job 2 - Files and script
+    runs-on: ubuntu-latest
+    needs: job1
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Print repo files
+        run: ls -l
+
+      - name: Print files content
+        run: |
+          cat 1.txt
+          cat 2.txt
+          cat 3.txt
+          cat 4.txt
+
+      - name: Run test.sh
+        run: ./test.sh
+
+  job3:
+    name: Job 3 - Variables and secrets
+    runs-on: ubuntu-latest
+    needs: job2
+    env:
+      FIRST_NAME: Omer
+    steps:
+      - name: Print First Name (env)
+        run: echo "First Name: $FIRST_NAME"
+
+      - name: Print Last Name (local variable)
+        run: |
+          LAST_NAME="Horovitz"
+          echo "Last Name: $LAST_NAME"
+
+      - name: Print phone number (secret)
+        run: echo "Phone: ${{ secrets.PHONE_NUMBER }}"
