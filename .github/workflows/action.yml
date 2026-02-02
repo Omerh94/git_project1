@@ -19,7 +19,7 @@ jobs:
         run: cat /etc/os-release
 
       - name: Print commit SHA
-        run: echo "${{ github.sha }}"
+        run: echo "Commit SHA is $GITHUB_SHA"
 
   job2:
     name: Job 2 - Files and script
@@ -39,24 +39,24 @@ jobs:
           cat 4.txt
 
       - name: Run test.sh
-        run: ./test.sh
+        run: bash ./test.sh
 
- job3:
-  name: Job 3 - Variables and secrets
-  runs-on: ubuntu-latest
-  needs: job2
-  env:
-    FIRST_NAME: Omer
-  steps:
-    - uses: actions/checkout@v4
+  job3:
+    name: Job 3 - Variables and secrets
+    runs-on: ubuntu-latest
+    needs: job2
+    env:
+      FIRST_NAME: Omer
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Print First Name (env)
-      run: echo "First name is $FIRST_NAME"
+      - name: Print First Name (env)
+        run: echo "First name is $FIRST_NAME"
 
-    - name: Print Last Name (local variable)
-      run: |
-        LAST_NAME=Horovitz
-        echo "Last name is $LAST_NAME"
+      - name: Print Last Name (local variable)
+        run: |
+          LAST_NAME="Horovitz"
+          echo "Last name is $LAST_NAME"
 
-    - name: Print phone number (secret)
-      run: echo "Phone is ${{ secrets.PHONE }}"
+      - name: Print phone number (secret)
+        run: echo "Phone is ${{ secrets.PHONE_NUMBER }}"
